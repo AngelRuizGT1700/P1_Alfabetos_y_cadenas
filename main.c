@@ -513,7 +513,6 @@ void generarSubcadenas()
         }
     }
 
-    // Cadena vacía
     printf("%d. '%s'\n", contador, "");
     fprintf(archivo, "%d. '%s'\n", contador, "");
 
@@ -526,7 +525,6 @@ void generarSubsecuenciasRecursivo(char *cadena, int indice, char *actual, int l
     if (indice == strlen(cadena))
     {
         actual[len_actual] = '\0';
-        // Verificar si ya existe esta subsecuencia
         for (int i = 0; i < *contador; i++)
         {
             if (strcmp(resultados[i], actual) == 0)
@@ -538,12 +536,9 @@ void generarSubsecuenciasRecursivo(char *cadena, int indice, char *actual, int l
         (*contador)++;
         return;
     }
-
-    // Incluir el carácter actual
     actual[len_actual] = cadena[indice];
     generarSubsecuenciasRecursivo(cadena, indice + 1, actual, len_actual + 1, resultados, contador);
 
-    // Excluir el carácter actual
     generarSubsecuenciasRecursivo(cadena, indice + 1, actual, len_actual, resultados, contador);
 }
 
@@ -569,7 +564,6 @@ void generarSubsecuencias()
 
     Cadena *cadena = coleccion[indice - 1];
 
-    // Verificar longitud máxima para subsecuencias
     if (cadena->longitud > 14)
     {
         printf("Advertencia: La cadena tiene longitud %d (>14). El cálculo puede ser lento.\n", cadena->longitud);
@@ -608,15 +602,12 @@ void generarSubsecuencias()
     printf("Total de subsecuencias: %d\n", contador);
     printf("Las subsecuencias se han guardado en 'subsecuencias.txt'\n");
 
-    // Liberar memoria
     for (int i = 0; i < MAX_SUBSECUENCIAS; i++)
     {
         free(subsecuencias[i]);
     }
     free(subsecuencias);
 }
-
-// OPERACIONES CON DOS CADENAS
 
 void concatenacion()
 {
@@ -647,7 +638,6 @@ void concatenacion()
     strcpy(resultado, cadena1->contenido);
     strcat(resultado, cadena2->contenido);
 
-    // Verificar si podemos guardar la nueva cadena
     if (total_cadenas < MAX_CADENAS && strlen(resultado) <= MAX_LONGITUD)
     {
         coleccion[total_cadenas] = crearCadena(resultado);
@@ -665,8 +655,6 @@ void concatenacion()
 
     guardarResultadoEnArchivo("Concatenación", resultado);
 }
-
-// FUNCIONES AUXILIARES
 
 void guardarResultadoEnArchivo(char *operacion, char *resultado)
 {
