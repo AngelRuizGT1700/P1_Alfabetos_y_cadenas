@@ -577,7 +577,6 @@ void generarSubsecuencias()
 
     printf("\n=== SUBSECUENCIAS DE '%s' ===\n", cadena->contenido);
 
-    // Reservar memoria para las subsecuencias
     char **subsecuencias = malloc(MAX_SUBSECUENCIAS * sizeof(char *));
     for (int i = 0; i < MAX_SUBSECUENCIAS; i++)
     {

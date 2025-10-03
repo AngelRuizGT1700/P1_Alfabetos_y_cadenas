@@ -1,6 +1,0 @@
-Operación: Concatenación
-Resultado: casaverde
-
-Operación: Concatenación
-Resultado: casacasa
-
