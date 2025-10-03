@@ -16,7 +16,6 @@ typedef struct
 Cadena *coleccion[MAX_CADENAS];
 int total_cadenas = 0;
 
-// Prototipos de funciones
 void menuCadenas();
 Cadena *crearCadena(char *cadena);
 void anadirCadena();
@@ -24,8 +23,6 @@ void verCadenas();
 void menuOperaciones();
 void menuOperacionesUnaCadena();
 void menuOperacionesDosCadenas();
-
-// Operaciones con una cadena
 void calcularLongitud();
 void potenciaPositiva();
 void potenciaNegativa();
@@ -33,11 +30,7 @@ void generarPrefijos();
 void generarSufijos();
 void generarSubcadenas();
 void generarSubsecuencias();
-
-// Operaciones con dos cadenas
 void concatenacion();
-
-// Funciones auxiliares
 void guardarResultadoEnArchivo(char *operacion, char *resultado);
 void generarSubsecuenciasRecursivo(char *cadena, int indice, char *actual, int len_actual, char **resultados, int *contador);
 
@@ -217,8 +210,6 @@ void anadirCadena()
     fgets(entrada, sizeof(entrada), stdin);
 
     entrada[strcspn(entrada, "\n")] = 0;
-
-    // Validar longitud
     if (strlen(entrada) > MAX_LONGITUD)
     {
         printf("Error: La cadena excede el límite de %d caracteres.\n", MAX_LONGITUD);
@@ -315,7 +306,6 @@ void potenciaPositiva()
         strcat(resultado, cadena->contenido);
     }
 
-    // Verificar si podemos guardar la nueva cadena
     if (total_cadenas < MAX_CADENAS && strlen(resultado) <= MAX_LONGITUD)
     {
         coleccion[total_cadenas] = crearCadena(resultado);
@@ -345,9 +335,17 @@ void potenciaNegativa()
     verCadenas();
     int indice, exponente;
     printf("Seleccione el número de la cadena: ");
-    scanf("%d", &indice);
+    if (scanf("%d", &indice) != 1)
+    {
+        printf("Entrada inválida.\n");
+        return;
+    }
     printf("Ingrese el exponente negativo: ");
-    scanf("%d", &exponente);
+    if (scanf("%d", &exponente) != 1)
+    {
+        printf("Entrada inválida.\n");
+        return;
+    }
     getchar();
 
     if (indice < 1 || indice > total_cadenas)
@@ -364,41 +362,38 @@ void potenciaNegativa()
 
     Cadena *cadena = coleccion[indice - 1];
     int len = cadena->longitud;
-    exponente = -exponente; // Hacerlo positivo para el cálculo
 
-    // Para potencia negativa, verificamos si la cadena puede dividirse en partes iguales
-    if (len % exponente != 0)
+    exponente = -exponente;
+
+    char invertida[len + 1];
+    for (int i = 0; i < len; i++)
+        invertida[i] = cadena->contenido[len - 1 - i];
+    invertida[len] = '\0';
+
+    int total_len = len * exponente;
+    char *resultado = malloc(total_len + 1);
+    if (!resultado)
     {
-        printf("Error: La cadena no puede dividirse en %d partes iguales.\n", exponente);
+        printf("Error de memoria.\n");
         return;
     }
 
-    int parte_len = len / exponente;
-    char parte[parte_len + 1];
-    strncpy(parte, cadena->contenido, parte_len);
-    parte[parte_len] = '\0';
+    resultado[0] = '\0';
+    for (int i = 0; i < exponente; i++)
+        strcat(resultado, invertida);
 
-    // Verificar que todas las partes sean iguales
-    for (int i = 1; i < exponente; i++)
-    {
-        if (strncmp(cadena->contenido + i * parte_len, parte, parte_len) != 0)
-        {
-            printf("Error: La cadena no es una potencia %d de alguna cadena.\n", exponente);
-            return;
-        }
-    }
+    printf("Resultado: '%s'\n", resultado);
 
-    printf("Resultado: '%s'\n", parte);
-
-    // Guardar como nueva cadena si es posible
     if (total_cadenas < MAX_CADENAS)
     {
-        coleccion[total_cadenas] = crearCadena(parte);
+        coleccion[total_cadenas] = crearCadena(resultado);
         printf("Resultado guardado como cadena #%d\n", total_cadenas + 1);
         total_cadenas++;
     }
 
-    guardarResultadoEnArchivo("Potencia Negativa", parte);
+    guardarResultadoEnArchivo("Potencia Negativa", resultado);
+
+    free(resultado);
 }
 
 void generarPrefijos()
